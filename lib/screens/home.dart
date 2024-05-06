@@ -45,20 +45,21 @@ class _HomeState extends State<Home> {
 
   Widget personIcon(time, distanceInMeters) {
     int differenceInMinutes = time.difference(DateTime.now()).inMinutes;
-    double minutesPerHundredMeters = differenceInMinutes / distanceInMeters * 100;
-    if (minutesPerHundredMeters > 4) {
+    int walkingTimeInMinutes = differenceInMinutes > 2 ? differenceInMinutes - 2 : 0;  // subtract 2 minutes preparation time
+    double minutesPerHundredMeters = walkingTimeInMinutes / distanceInMeters * 100;
+    if (minutesPerHundredMeters > 3) {
       return Icon(
         FontAwesomeIcons.person,
         color: Colors.blue,
         size: 28.0,
       );
-    } else if (minutesPerHundredMeters > 3) {
+    } else if (minutesPerHundredMeters > 2) {
       return Icon(
         FontAwesomeIcons.personWalking,
         color: Colors.green,
         size: 28.0,
       );
-    } else if (minutesPerHundredMeters > 2) {
+    } else if (minutesPerHundredMeters > 1) {
       return Icon(
         FontAwesomeIcons.personRunning,
         color: Colors.orange,

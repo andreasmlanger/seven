@@ -8,22 +8,22 @@ const String FIB = 'https://www.mvg.de/api/fib/v2';
 const String FIB_NEARBY = '$FIB/station/nearby';
 const String FIB_DEPART = '$FIB/departure';
 
-const String HOME_DESTINATION = 'Aying';
-const String WORK_DESTINATION = 'Wolfratshausen';
+const List<String> HOME_DESTINATIONS = ['Aying', 'Kreuzstraße'];
+const List<String> WORK_DESTINATIONS = ['Wolfratshausen'];
 
 // Stations of S7 between Ostbahnhof and Mittersendling
-const List <Map<String, String>> STATIONS = [
-  {'name': 'München, Ostbahnhof', 'destination': WORK_DESTINATION},
-  {'name': 'Rosenheimer Platz', 'destination': WORK_DESTINATION},
-  {'name': 'Isartor', 'destination': WORK_DESTINATION},
-  {'name': 'Marienplatz', 'destination': WORK_DESTINATION},
-  {'name': 'Karlsplatz', 'destination': WORK_DESTINATION},
-  {'name': 'München Hbf', 'destination': WORK_DESTINATION},
-  {'name': 'Hackerbrücke', 'destination': WORK_DESTINATION},
-  {'name': 'Donnersberger Brücke', 'destination': WORK_DESTINATION},
-  {'name': 'Heimeranplatz', 'destination': HOME_DESTINATION},
-  {'name': 'Harras', 'destination': HOME_DESTINATION},
-  {'name': 'Mittersendling', 'destination': HOME_DESTINATION},
+const List <Map<String, dynamic>> STATIONS = [
+  {'name': 'München, Ostbahnhof', 'destination': WORK_DESTINATIONS},
+  {'name': 'Rosenheimer Platz', 'destination': WORK_DESTINATIONS},
+  {'name': 'Isartor', 'destination': WORK_DESTINATIONS},
+  {'name': 'Marienplatz', 'destination': WORK_DESTINATIONS},
+  {'name': 'Karlsplatz', 'destination': WORK_DESTINATIONS},
+  {'name': 'München Hbf', 'destination': WORK_DESTINATIONS},
+  {'name': 'Hackerbrücke', 'destination': WORK_DESTINATIONS},
+  {'name': 'Donnersberger Brücke', 'destination': WORK_DESTINATIONS},
+  {'name': 'Heimeranplatz', 'destination': HOME_DESTINATIONS},
+  {'name': 'Harras', 'destination': HOME_DESTINATIONS},
+  {'name': 'Mittersendling', 'destination': HOME_DESTINATIONS},
 ];
 
 Future<Map<String, dynamic>> fetchNearbyStation(lat, lon) async {
@@ -56,11 +56,12 @@ Future<Map<String, dynamic>> fetchNearbyStation(lat, lon) async {
 Future<Map<String, dynamic>> fetchNextDeparture(globalId, destination) async {
   final String apiCall = '$FIB_DEPART?globalId=$globalId';
   final Uri url = Uri.parse(apiCall);
+  print(url);
   try {
     final http.Response response = await http.get(url);
     List<dynamic> dataList = jsonDecode(response.body);
     for (var item in dataList) {
-      if (item['label'] == 'S7' && item['destination'] == destination) {
+      if (item['label'] == 'S7' && destination.contains(item['destination']) && !item['cancelled']) {
         return {
           'plannedDepartureTime': DateTime.fromMillisecondsSinceEpoch(item['plannedDepartureTime']),
           'realtimeDepartureTime': DateTime.fromMillisecondsSinceEpoch(item['realtimeDepartureTime']),
