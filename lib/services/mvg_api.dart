@@ -27,10 +27,11 @@ const List <Map<String, dynamic>> STATIONS = [
 ];
 
 Future<Map<String, dynamic>> fetchNearbyStation(lat, lon) async {
-  //lat = 48.12832633085423;  // only for debug
-  //lon = 11.597135944262709;  // only for debug
+  //lat = 48.10569183403944;  // only for debug
+  //lon = 11.537840059856407;  // only for debug
 
   final String apiCall = '$FIB_NEARBY?latitude=$lat&longitude=$lon';
+  //print(apiCall);
   final Uri url = Uri.parse(apiCall);
   try {
     final http.Response response = await http.get(url);
@@ -56,7 +57,7 @@ Future<Map<String, dynamic>> fetchNearbyStation(lat, lon) async {
 Future<Map<String, dynamic>> fetchNextDeparture(globalId, destination) async {
   final String apiCall = '$FIB_DEPART?globalId=$globalId';
   final Uri url = Uri.parse(apiCall);
-  print(url);
+  //print(url);
   try {
     final http.Response response = await http.get(url);
     List<dynamic> dataList = jsonDecode(response.body);

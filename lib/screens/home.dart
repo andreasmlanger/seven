@@ -15,7 +15,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Timer? _timer;
-  Map<String, dynamic> result = {'message': 'Looking for S7', 'loading': true};
+  Map<String, dynamic> result = {'message': 'Searching', 'loading': true};
   bool idle = true;
 
   @override
@@ -47,7 +47,13 @@ class _HomeState extends State<Home> {
     int differenceInMinutes = time.difference(DateTime.now()).inMinutes;
     int walkingTimeInMinutes = differenceInMinutes > 2 ? differenceInMinutes - 2 : 0;  // subtract 2 minutes preparation time
     double minutesPerHundredMeters = walkingTimeInMinutes / distanceInMeters * 100;
-    if (minutesPerHundredMeters > 3) {
+    if (distanceInMeters < 50) {
+      return Icon(
+        FontAwesomeIcons.trainSubway,
+        color: Colors.green,
+        size: 28.0,
+      );
+    } else if (minutesPerHundredMeters > 3) {
       return Icon(
         FontAwesomeIcons.person,
         color: Colors.blue,
@@ -81,9 +87,9 @@ class _HomeState extends State<Home> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if (result['loading'])
-            const SpinKitFadingFour(
+            const SpinKitChasingDots(
               color: Colors.white,
-              size: 100.0,
+              size: 40.0,
             ),
           SizedBox(height: 25.0, width: MediaQuery.of(context).size.width),
           Text(
